@@ -34,6 +34,7 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'com.querydsl:querydsl-mongodb:5.0.0'
 	annotationProcessor 'com.querydsl:querydsl-apt:5.0.0'
+	implementation group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.4'
 }
 
 tasks.named('test') {

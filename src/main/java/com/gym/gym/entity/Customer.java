@@ -1,18 +1,18 @@
 package com.gym.gym.entity;
 
 import com.gym.gym.base.model.BaseModel;
+import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @EqualsAndHashCode(callSuper = true)
 @Document(collection = "customer")
 @Data
-@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Customer extends BaseModel<String> {
@@ -21,6 +21,7 @@ public class Customer extends BaseModel<String> {
     private String name;
     private String surname;
     private String email;
-    private int age;
+    private Integer age;
+    private Boolean isActive = true;
 
 }

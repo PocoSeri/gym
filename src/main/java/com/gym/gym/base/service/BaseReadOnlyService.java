@@ -3,10 +3,9 @@ package com.gym.gym.base.service;
 import com.gym.gym.base.model.BaseModel;
 import com.gym.gym.base.repository.BaseRepository;
 import com.gym.gym.exception.AppException;
-import com.gym.gym.utils.FetchOptions;
-
 import java.io.Serializable;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static com.gym.gym.exception.AppException.ErrCode.ALREADY_EXISTS;
@@ -21,24 +20,16 @@ public abstract class BaseReadOnlyService<ENTITY extends BaseModel<PRIMARY_KEY>,
     }
 
     public ENTITY getOne(PRIMARY_KEY id) {
-        return repository.findById(id).orElseThrow(() ->
+        return findById(id).orElseThrow(() ->
                 new AppException(NOT_FOUND, String.format("Entity with id: %s not found", id)));
     }
 
-    public List<ENTITY> getList(FetchOptions fetchOptions) {
-        return repository.findAll(fetchOptions);
-    }
+    public Optional<ENTITY> findById(PRIMARY_KEY id){
 
-    public void throwErrorIfIdNotExists(PRIMARY_KEY id) throws AppException {
-        if (!this.repository.existsById(id)) {
-            throw this.getIdNotExistException(id);
-        }
+        return repository.findById(id);
     }
-
-    public void throwErrorIfIdsNotExists(Set<PRIMARY_KEY> ids) throws AppException {
-        if (!this.repository.existsAllById(ids)) {
-            throw this.getIdsNotExistException(ids);
-        }
+    public List<ENTITY> getAll() {
+        return repository.findAll();
     }
 
     public void throwErrorIfIdExists(PRIMARY_KEY id) throws AppException {

@@ -41,11 +41,10 @@ public abstract class BaseReadOnlyController<ENTITY extends BaseModel<PRIMARY_KE
     public RestResponse<DTO> getOne(@PathVariable PRIMARY_KEY id, HttpServletRequest request) throws AppException {
         this.isAllowed(GET_ONE);
         Optional<ENTITY> entity = this.readonlyService.findById(id);
-        IBaseReadOnlyMapper var10001 = this.mapper;
+        IBaseReadOnlyMapper<ENTITY, DTO> var10001 = this.mapper;
         Objects.requireNonNull(var10001);
-        DTO dto = (BaseDto)entity.map(var10001::toDto).orElseThrow(() -> {
-            return new AppException(NOT_FOUND, "Could not find id " + id);
-        });
+        DTO dto = (DTO) entity.map(var10001::toDto).orElseThrow(() ->
+                new AppException(NOT_FOUND, "Could not find id " + id));
         return new RestResponse<>(dto);
     }
 

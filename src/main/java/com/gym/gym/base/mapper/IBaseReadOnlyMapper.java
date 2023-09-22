@@ -8,20 +8,20 @@ import org.mapstruct.Named;
 import java.util.ArrayList;
 import java.util.List;
 
-public interface IBaseReadOnlyMapper<Entity, Dto> {
+public interface IBaseReadOnlyMapper<ENTITY, DTO> {
     @Named("toEntity")
-    Entity toEntity(Dto dto);
+    ENTITY toEntity(DTO dto);
 
-    Dto toDto(Entity entity);
+    DTO toDto(ENTITY entity);
 
-    List<Dto> entityToDtoList(List<Entity> entity);
+    List<DTO> entityToDtoList(List<ENTITY> entity);
 
     @IterableMapping(
             qualifiedByName = {"toEntity"}
     )
-    List<Entity> dtoToEntityList(List<Dto> entity);
+    List<ENTITY> dtoToEntityList(List<DTO> entity);
 
-    default List<DropdownDto> entityToDropdownDtoList(List<Entity> entity) {
-        return new ArrayList();
+    default List<DropdownDto> entityToDropdownDtoList(List<ENTITY> entity) {
+        return new ArrayList<>();
     }
 }

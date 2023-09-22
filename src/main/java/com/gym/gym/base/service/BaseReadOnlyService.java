@@ -19,22 +19,22 @@ public abstract class BaseReadOnlyService<ENTITY extends BaseModel<PRIMARY_KEY>,
         this.repository = repository;
     }
 
-    public ENTITY getOne(PRIMARY_KEY id) {
-        return findById(id).orElseThrow(() ->
-                new AppException(NOT_FOUND, String.format("Entity with id: %s not found", id)));
-    }
-
     public Optional<ENTITY> findById(PRIMARY_KEY id){
-
+        throwErrorIfIdNotExists(id);
         return repository.findById(id);
     }
-    public List<ENTITY> getAll() {
+    public List<ENTITY> getList() {
         return repository.findAll();
     }
 
     public void throwErrorIfIdExists(PRIMARY_KEY id) throws AppException {
         if (this.repository.existsById(id)) {
             throw new AppException(ALREADY_EXISTS, "Id " + id + " already exists");
+        }
+    }
+    public void throwErrorIfIdNotExists(PRIMARY_KEY id) throws AppException {
+        if (!this.repository.existsById(id)) {
+            throw this.getIdNotExistException(id);
         }
     }
 

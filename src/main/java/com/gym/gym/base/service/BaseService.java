@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 import java.util.Objects;
 
 import static com.gym.gym.exception.AppException.ErrCode.UNPROCESSABLE_ENTITY;

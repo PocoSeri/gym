@@ -1,6 +1,7 @@
 package com.gym.gym.controller;
 
 import com.gym.gym.base.controller.BaseController;
+import com.gym.gym.base.model.BaseModel;
 import com.gym.gym.entity.Customer;
 import com.gym.gym.mapping.CustomerMapper;
 import com.gym.gym.model.CustomerDto;

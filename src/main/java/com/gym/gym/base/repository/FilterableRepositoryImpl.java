@@ -12,12 +12,16 @@ import org.springframework.stereotype.Repository;
 import java.io.Serializable;
 import java.util.List;
 
-@NoRepositoryBean
+@Repository
 public class FilterableRepositoryImpl<T> implements FilterableRepository<T> {
 
-    @Autowired
+
     private MongoTemplate mongoTemplate;
 
+    @Autowired
+    public FilterableRepositoryImpl(MongoTemplate mongoTemplate) {
+        this.mongoTemplate = mongoTemplate;
+    }
     @Override
     public Page<T> findAllWithFilter(Class<T> typeParameterClass, Filtering filtering, Pageable pageable) {
         Query query = constructQueryFromFiltering(filtering).with(pageable);

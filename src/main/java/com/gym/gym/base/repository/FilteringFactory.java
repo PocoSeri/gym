@@ -1,8 +1,6 @@
 package com.gym.gym.base.repository;
 
-import com.gym.gym.base.repository.Filtering;
 import lombok.NoArgsConstructor;
-
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -39,7 +37,7 @@ public class FilteringFactory {
         // a filter is in the format: key|operator|value
         for (String filterString : filter) {
             // first split by | to get the key, operator and value
-            String[] filterSplit = filterString.split("\\|");
+            String[] filterSplit = filterString.split("-");
 
             // check if the filter is in the correct format
             if (filterSplit.length != 3) {

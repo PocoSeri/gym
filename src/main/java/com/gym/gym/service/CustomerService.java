@@ -1,5 +1,6 @@
 package com.gym.gym.service;
 
+import com.gym.gym.base.repository.FilterableRepository;
 import com.gym.gym.base.service.BaseService;
 import com.gym.gym.base.service.IBaseService;
 import com.gym.gym.entity.Customer;
@@ -13,8 +14,8 @@ public class CustomerService extends BaseService<Customer, String> implements IB
     private final CustomerRepository customerRepository;
 
     @Autowired
-    public CustomerService(CustomerRepository customerRepository) {
-        super(customerRepository);
+    public CustomerService(CustomerRepository customerRepository, FilterableRepository filterableRepository) {
+        super(customerRepository, filterableRepository);
         this.customerRepository = customerRepository;
     }
 }

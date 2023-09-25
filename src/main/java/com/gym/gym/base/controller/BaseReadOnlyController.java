@@ -7,7 +7,6 @@ import com.gym.gym.base.model.DropdownDto;
 import com.gym.gym.base.model.restresponse.PaginatedResponse;
 import com.gym.gym.base.model.restresponse.RestResponse;
 import com.gym.gym.base.service.IBaseReadOnlyService;
-import com.gym.gym.entity.Customer;
 import com.gym.gym.exception.AppException;
 import com.gym.gym.utils.BaseConstants;
 import com.gym.gym.utils.ControllerMethod;
@@ -31,13 +30,12 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.gym.gym.exception.AppException.ErrCode.NOT_FOUND;
-import static com.gym.gym.utils.BaseConstants.MIN_PAGE_ITEMS;
-import static com.gym.gym.utils.BaseConstants.MIN_PAGE_NUMBER;
 import static com.gym.gym.utils.ControllerMethod.*;
 
 public abstract class BaseReadOnlyController<ENTITY extends BaseModel<PRIMARY_KEY>, DTO extends BaseDto, PRIMARY_KEY extends Serializable> {
     protected final IBaseReadOnlyService<ENTITY, PRIMARY_KEY> readonlyService;
     protected final IBaseReadOnlyMapper<ENTITY, DTO> mapper;
+
 
     private static final Logger logger = LoggerFactory.getLogger(BaseReadOnlyController.class);
 

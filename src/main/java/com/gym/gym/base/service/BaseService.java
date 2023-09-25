@@ -2,6 +2,7 @@ package com.gym.gym.base.service;
 
 import com.gym.gym.base.model.BaseModel;
 import com.gym.gym.base.repository.BaseRepository;
+import com.gym.gym.base.repository.FilterableRepository;
 import com.gym.gym.exception.AppException;
 import com.gym.gym.exception.InvalidPatchDtoException;
 import org.slf4j.Logger;
@@ -22,8 +23,9 @@ public abstract class BaseService<ENTITY extends BaseModel<PRIMARY_KEY>, PRIMARY
     protected NullAndListAwareBeanUtils nullAndListAwareBeanUtils;
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public BaseService(BaseRepository<ENTITY, PRIMARY_KEY> repository) {
-        super(repository);
+    @Autowired
+    public BaseService(BaseRepository<ENTITY, PRIMARY_KEY> repository, FilterableRepository filterableRepository) {
+        super(repository, filterableRepository);
     }
 
     @Override

@@ -21,6 +21,7 @@ public abstract class BaseController<ENTITY extends BaseModel<PRIMARY_KEY>, DTO 
     protected final IBaseService<ENTITY, PRIMARY_KEY> service;
     protected final IBaseMapper<ENTITY, DTO, PATCH_DTO> patchMapper;
 
+
     protected BaseController(IBaseService<ENTITY, PRIMARY_KEY> service, IBaseMapper<ENTITY, DTO, PATCH_DTO> mapper) {
         super(service, mapper);
         this.patchMapper = mapper;

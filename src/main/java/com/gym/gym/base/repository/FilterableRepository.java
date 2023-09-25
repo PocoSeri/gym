@@ -1,24 +1,16 @@
 package com.gym.gym.base.repository;
 
-import com.gym.gym.base.model.BaseModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.repository.NoRepositoryBean;
-import java.io.Serializable;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-@NoRepositoryBean
-public interface BaseRepository<T extends BaseModel<ID>, ID extends Serializable> extends MongoRepository<T, ID> {
-
-    Integer PAGE_SIZE_MAX = -1;
-    Integer PAGE_SIZE_UNLIMITED = -2;
-
+public interface FilterableRepository<T> {
     Page<T> findAllWithFilter(Class<T> typeParameterClass,
                               Filtering filtering, Pageable pageable);
 
@@ -68,5 +60,4 @@ public interface BaseRepository<T extends BaseModel<ID>, ID extends Serializable
         criteriaMap.values().forEach(query::addCriteria);
         return query;
     }
-
 }

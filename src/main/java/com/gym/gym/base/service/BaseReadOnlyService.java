@@ -1,8 +1,14 @@
 package com.gym.gym.base.service;
 
 import com.gym.gym.base.model.BaseModel;
+import com.gym.gym.base.model.restresponse.PaginatedResponse;
 import com.gym.gym.base.repository.BaseRepository;
+import com.gym.gym.base.repository.FilteringFactory;
+import com.gym.gym.entity.Customer;
 import com.gym.gym.exception.AppException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
@@ -23,8 +29,19 @@ public abstract class BaseReadOnlyService<ENTITY extends BaseModel<PRIMARY_KEY>,
         throwErrorIfIdNotExists(id);
         return repository.findById(id);
     }
-    public List<ENTITY> getList() {
-        return repository.findAll();
+    public Page<ENTITY> getList(Pageable pageable) {
+        return repository.findAll(pageable);
+    }
+
+    public PaginatedResponse<ENTITY> getList(Pageable pageable, List<String> filters) {
+        Page<ENTITY> all = repository.findAllWithFilter((Class<ENTITY>) Customer.class, FilteringFactory.parseFromParams(filters, Customer.class), pageable);
+        return PaginatedResponse.<ENTITY>builder()
+                .currentPage(all.getNumber())
+                .totalItems(all.getTotalElements())
+                .totalPages(all.getTotalPages())
+                .items(all.getContent())
+                .hasNext(all.hasNext())
+                .build();
     }
 
     public void throwErrorIfIdExists(PRIMARY_KEY id) throws AppException {

@@ -4,21 +4,25 @@ import com.gym.gym.base.mapper.IBaseReadOnlyMapper;
 import com.gym.gym.base.model.BaseDto;
 import com.gym.gym.base.model.BaseModel;
 import com.gym.gym.base.model.DropdownDto;
+import com.gym.gym.base.model.restresponse.PaginatedResponse;
 import com.gym.gym.base.model.restresponse.RestResponse;
 import com.gym.gym.base.service.IBaseReadOnlyService;
+import com.gym.gym.entity.Customer;
 import com.gym.gym.exception.AppException;
 import com.gym.gym.utils.BaseConstants;
 import com.gym.gym.utils.ControllerMethod;
-import com.gym.gym.utils.FetchOptions;
-import com.gym.gym.utils.PageModel;
 import com.gym.gym.utils.annotation.ControllerAllowedMethods;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.server.MethodNotAllowedException;
 
@@ -27,11 +31,14 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.gym.gym.exception.AppException.ErrCode.NOT_FOUND;
+import static com.gym.gym.utils.BaseConstants.MIN_PAGE_ITEMS;
+import static com.gym.gym.utils.BaseConstants.MIN_PAGE_NUMBER;
 import static com.gym.gym.utils.ControllerMethod.*;
 
 public abstract class BaseReadOnlyController<ENTITY extends BaseModel<PRIMARY_KEY>, DTO extends BaseDto, PRIMARY_KEY extends Serializable> {
     protected final IBaseReadOnlyService<ENTITY, PRIMARY_KEY> readonlyService;
     protected final IBaseReadOnlyMapper<ENTITY, DTO> mapper;
+
     private static final Logger logger = LoggerFactory.getLogger(BaseReadOnlyController.class);
 
     @GetMapping(
@@ -48,35 +55,43 @@ public abstract class BaseReadOnlyController<ENTITY extends BaseModel<PRIMARY_KE
         return new RestResponse<>(dto);
     }
 
+//    @GetMapping
+//    @ResponseBody
+//    public RestResponse<List<DTO>> getList(@RequestParam(required = false) Integer pageNumber, @RequestParam(required = false) Integer pageItems,
+//
+//                                           HttpServletRequest request, HttpServletResponse response) throws AppException {
+//        this.isAllowed(GET_LIST);
+//        pageNumber = pageNumber != null ? pageNumber : MIN_PAGE_NUMBER;
+//        pageItems = pageItems != null ? pageItems : MIN_PAGE_ITEMS;
+//        Pageable pageable1 = PageRequest.of(pageNumber, pageItems);
+//
+//        return this.getList(response, pageable1);
+//    }
+
     @GetMapping
     @ResponseBody
-    public RestResponse<List<DTO>> getList(PageModel pageModel, HttpServletRequest request, HttpServletResponse response) throws AppException {
-        this.isAllowed(GET_LIST);
-        if (pageModel == null) {
-            pageModel = new PageModel();
-        }
-
-        return this.getList(FetchOptions.builder().pageModel(pageModel).build(), response);
+    public PaginatedResponse<ENTITY> getList(@RequestParam int page, @RequestParam int size, @RequestParam List<String> filter) {
+        Pageable pageable = PageRequest.of(page, size);
+        return readonlyService.getList(pageable, filter);
     }
 
-    public RestResponse<List<DTO>> getList(FetchOptions fetchOptions, HttpServletResponse response) {
-        List<ENTITY> res = this.readonlyService.getList();
-        response.setHeader(BaseConstants.X_TOTAL_COUNT, Integer.toString(fetchOptions.getPageModel().getTotalRows()));
-        List<DTO> dtoList = this.mapper.entityToDtoList(res);
-        return new RestResponse<>(dtoList);
-    }
+//    public RestResponse<List<DTO>> getList(HttpServletResponse response, Pageable pageable) {
+//        Page<ENTITY> res = this.readonlyService.getList(pageable);
+//        List<DTO> dtoList = this.mapper.entityToDtoList(res.getContent());
+//        return new RestResponse<>(dtoList);
+//    }
 
     @GetMapping({"/dropdown"})
     @ResponseBody
-    public RestResponse<List<DropdownDto>> dropdown(PageModel pageModel, HttpServletRequest request, HttpServletResponse response) throws AppException {
+    public RestResponse<List<DropdownDto>> dropdown(Pageable page, HttpServletRequest request, HttpServletResponse response) throws AppException {
         this.isAllowed(DROPDOWN);
         /*if (pageModel == null) {
             pageModel = new PageModel();
         } WIP*/
 
-        List<ENTITY> res = this.readonlyService.getList();
-        response.setHeader(BaseConstants.X_TOTAL_COUNT, Integer.toString(pageModel.getTotalRows()));
-        List<DropdownDto> dtoList = this.mapper.entityToDropdownDtoList(res);
+        Page<ENTITY> res = this.readonlyService.getList(page);
+        response.setHeader(BaseConstants.X_TOTAL_COUNT, Integer.toString(page.getPageNumber()));
+        List<DropdownDto> dtoList = this.mapper.entityToDropdownDtoList(res.getContent());
         return new RestResponse<>(dtoList);
     }
 

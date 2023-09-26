@@ -54,40 +54,17 @@ public abstract class BaseReadOnlyController<ENTITY extends BaseModel<PRIMARY_KE
         return new RestResponse<>(dto);
     }
 
-//    @GetMapping
-//    @ResponseBody
-//    public RestResponse<List<DTO>> getList(@RequestParam(required = false) Integer pageNumber, @RequestParam(required = false) Integer pageItems,
-//
-//                                           HttpServletRequest request, HttpServletResponse response) throws AppException {
-//        this.isAllowed(GET_LIST);
-//        pageNumber = pageNumber != null ? pageNumber : MIN_PAGE_NUMBER;
-//        pageItems = pageItems != null ? pageItems : MIN_PAGE_ITEMS;
-//        Pageable pageable1 = PageRequest.of(pageNumber, pageItems);
-//
-//        return this.getList(response, pageable1);
-//    }
-
     @GetMapping
     @ResponseBody
-    public PaginatedResponse<ENTITY> getList(@RequestParam int page, @RequestParam int size, @RequestParam List<String> filter) {
+    public PaginatedResponse<ENTITY> getList(@RequestParam int page, @RequestParam int size, @RequestParam(required = false) List<String> filter) {
         Pageable pageable = PageRequest.of(page, size);
         return readonlyService.getList(pageable, filter);
     }
-
-//    public RestResponse<List<DTO>> getList(HttpServletResponse response, Pageable pageable) {
-//        Page<ENTITY> res = this.readonlyService.getList(pageable);
-//        List<DTO> dtoList = this.mapper.entityToDtoList(res.getContent());
-//        return new RestResponse<>(dtoList);
-//    }
 
     @GetMapping({"/dropdown"})
     @ResponseBody
     public RestResponse<List<DropdownDto>> dropdown(Pageable page, HttpServletRequest request, HttpServletResponse response) throws AppException {
         this.isAllowed(DROPDOWN);
-        /*if (pageModel == null) {
-            pageModel = new PageModel();
-        } WIP*/
-
         Page<ENTITY> res = this.readonlyService.getList(page);
         response.setHeader(BaseConstants.X_TOTAL_COUNT, Integer.toString(page.getPageNumber()));
         List<DropdownDto> dtoList = this.mapper.entityToDropdownDtoList(res.getContent());

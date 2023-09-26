@@ -1,6 +1,7 @@
 package com.gym.gym.base.repository;
 
 import lombok.NoArgsConstructor;
+import org.springframework.util.CollectionUtils;
 
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
@@ -34,7 +35,8 @@ public class FilteringFactory {
 
     public static <T> Filtering parseFromParams(List<String> filter, Class<T> typeParameterClass) {
         Filtering filtering = new Filtering();
-
+        if (CollectionUtils.isEmpty(filter))
+            return filtering;
         // a filter is in the format: key|operator|value
         for (String filterString : filter) {
             // first split by | to get the key, operator and value

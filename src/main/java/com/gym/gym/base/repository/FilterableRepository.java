@@ -1,5 +1,6 @@
 package com.gym.gym.base.repository;
 
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -54,7 +55,7 @@ public interface FilterableRepository<T> {
                 }
                 case ne -> criteriaMap.put(filter.key, Criteria.where(filter.key).ne(filter.value));
                 case nin -> criteriaMap.put(filter.key, Criteria.where(filter.key).nin((HashSet<Object>) filter.value));
-                case regex -> criteriaMap.put(filter.key, Criteria.where(filter.key).regex((String) filter.value));
+                case regex -> criteriaMap.put(filter.key, Criteria.where(filter.key).regex((String) filter.value, "i"));
                 default -> throw new IllegalArgumentException("Unknown operator: " + filter.operator);
             }
         }

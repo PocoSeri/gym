@@ -37,9 +37,9 @@ public class FilteringFactory {
         Filtering filtering = new Filtering();
         if (CollectionUtils.isEmpty(filter))
             return filtering;
-        // a filter is in the format: key|operator|value
+        // a filter is in the format: key-operator-value
         for (String filterString : filter) {
-            // first split by | to get the key, operator and value
+            // first split by - to get the key, operator and value
             String[] filterSplit = filterString.split("-");
 
             // check if the filter is in the correct format

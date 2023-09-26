@@ -2,7 +2,6 @@ package com.gym.gym.model;
 
 
 import com.gym.gym.base.model.BaseIdDto;
-import com.gym.gym.enums.Roles;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

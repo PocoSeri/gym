@@ -56,9 +56,9 @@ public abstract class BaseReadOnlyController<ENTITY extends BaseModel<PRIMARY_KE
 
     @GetMapping
     @ResponseBody
-    public PaginatedResponse<ENTITY> getList(@RequestParam int page, @RequestParam int size, @RequestParam(required = false) List<String> filter) {
+    public PaginatedResponse<ENTITY> getList(@RequestParam int page, @RequestParam int size, @RequestParam(required = false) List<String> f) {
         Pageable pageable = PageRequest.of(page, size);
-        return readonlyService.getList(pageable, filter);
+        return readonlyService.getList(pageable, f);
     }
 
     @GetMapping({"/dropdown"})

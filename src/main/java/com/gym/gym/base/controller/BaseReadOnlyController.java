@@ -30,7 +30,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.gym.gym.exception.AppException.ErrCode.NOT_FOUND;
-import static com.gym.gym.utils.ControllerMethod.*;
+import static com.gym.gym.utils.ControllerMethod.DROPDOWN;
+import static com.gym.gym.utils.ControllerMethod.GET_ONE;
 
 public abstract class BaseReadOnlyController<ENTITY extends BaseModel<PRIMARY_KEY>, DTO extends BaseDto, PRIMARY_KEY extends Serializable> {
     protected final IBaseReadOnlyService<ENTITY, PRIMARY_KEY> readonlyService;

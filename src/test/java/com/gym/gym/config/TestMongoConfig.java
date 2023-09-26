@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory;
 public class TestMongoConfig {
 
     @Bean
-    public MongoTemplate mongoTemplate() {
+    public MongoTemplate mongoTemplateTest() {
         return new MongoTemplate(new SimpleMongoClientDatabaseFactory("mongodb://localhost:27017/testdb"));
     }
 }

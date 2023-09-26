@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 
 @EqualsAndHashCode(callSuper = true)
 @Component
-@Document(collection = "customer")
+@Document(collection = "activity")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,7 +21,5 @@ public class Activity extends BaseModel<String> {
     @Id
     private String id;
     private String name;
-    private LocalDateTime registeredAt;
-    private LocalDateTime modifiedAt;
 
 }

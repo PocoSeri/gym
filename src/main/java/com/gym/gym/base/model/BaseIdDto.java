@@ -1,9 +1,11 @@
 package com.gym.gym.base.model;
 
+
 public abstract class BaseIdDto<K> extends BaseDto {
     public abstract K getId();
 
     public abstract void setId(K id);
+
 
     protected BaseIdDto(final BaseIdDtoBuilder<K, ?, ?> b) {
         super(b);

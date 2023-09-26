@@ -33,7 +33,8 @@ public abstract class BaseService<ENTITY extends BaseModel<PRIMARY_KEY>, PRIMARY
     public ENTITY insert(ENTITY entity) throws AppException {
         if (Objects.isNull(entity))
             throw new AppException(AppException.ErrCode.BAD_INPUT, "You can't save a null entity");
-        this.throwErrorIfIdExists(entity.getId());
+        if (Objects.nonNull(entity.getId()))
+            this.throwErrorIfIdExists(entity.getId());
         LocalDateTime now = LocalDateTime.now();
         entity.setModifiedAt(now);
         entity.setRegisteredAt(now);

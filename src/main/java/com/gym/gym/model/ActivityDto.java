@@ -9,20 +9,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Setter
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CustomerDto extends BaseIdDto<String> {
+public class ActivityDto extends BaseIdDto<String> {
 
     private String id;
     private String name;
-    private String surname;
-    private String email;
-    private Integer age;
-    private Boolean isActive;
-    private Roles role;
 }

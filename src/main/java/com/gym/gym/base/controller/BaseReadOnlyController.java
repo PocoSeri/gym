@@ -56,7 +56,9 @@ public abstract class BaseReadOnlyController<ENTITY extends BaseModel<PRIMARY_KE
 
     @GetMapping
     @ResponseBody
-    public PaginatedResponse<ENTITY> getList(@RequestParam int page, @RequestParam int size, @RequestParam(required = false) List<String> f) {
+    public PaginatedResponse<ENTITY> getList(@RequestParam(required = false, defaultValue = "0") Integer page,
+                                             @RequestParam(required = false, defaultValue = "10") Integer size,
+                                             @RequestParam(required = false) List<String> f) {
         Pageable pageable = PageRequest.of(page, size);
         return readonlyService.getList(pageable, f);
     }

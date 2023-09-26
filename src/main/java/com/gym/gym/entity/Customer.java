@@ -1,6 +1,7 @@
 package com.gym.gym.entity;
 
 import com.gym.gym.base.model.BaseModel;
+import com.gym.gym.enums.Roles;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -25,7 +26,6 @@ public class Customer extends BaseModel<String> {
     private String email;
     private Integer age;
     private Boolean isActive = true;
-    private LocalDateTime registeredAt;
-    private LocalDateTime modifiedAt;
+    private Roles role;
 
 }

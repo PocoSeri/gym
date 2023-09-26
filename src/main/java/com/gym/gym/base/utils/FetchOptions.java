@@ -1,4 +1,4 @@
-package com.gym.gym.utils;
+package com.gym.gym.base.utils;
 
 public class FetchOptions {
     protected PageModel pageModel;

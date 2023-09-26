@@ -5,10 +5,10 @@ import com.gym.gym.base.model.restresponse.PaginatedResponse;
 import com.gym.gym.base.repository.BaseRepository;
 import com.gym.gym.base.repository.FilterableRepository;
 import com.gym.gym.base.repository.FilteringFactory;
-import com.gym.gym.entity.Customer;
+import com.gym.gym.base.utils.ApplicationContextProvider;
 import com.gym.gym.exception.AppException;
-import com.gym.gym.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -25,8 +25,18 @@ public abstract class BaseReadOnlyService<ENTITY extends BaseModel<PRIMARY_KEY>,
     protected final BaseRepository<ENTITY, PRIMARY_KEY> repository;
     protected final FilterableRepository<ENTITY> filterableRepository;
 
+    protected final Class<?> documentService;
+    protected final Class<?> documentClass;
+
+
     @Autowired
     public BaseReadOnlyService(final BaseRepository<ENTITY, PRIMARY_KEY> repository, FilterableRepository<ENTITY> filterableRepository) {
+
+        this.documentService = this.getClass();
+        // Automate mapping based on the service class name
+        String documentClassName = documentService.getSimpleName().replace("Service", "");
+        ApplicationContext context = ApplicationContextProvider.getApplicationContext();
+        this.documentClass = context.getBean(documentClassName.toLowerCase()).getClass();
         this.repository = repository;
         this.filterableRepository = filterableRepository;
     }
@@ -71,11 +81,8 @@ public abstract class BaseReadOnlyService<ENTITY extends BaseModel<PRIMARY_KEY>,
     }
 
     // Controllo l'istanza del service chiamato e ritorno la classe del model equivalente
-    private Class<? extends BaseModel<?>> getModelClass() {
-        Class<?> serviceClass = this.getClass();
-        if(serviceClass.equals(CustomerService.class)) {
-            return Customer.class;
-        }
-        return null;
+    private Class<?> getModelClass() {
+        return documentClass;
     }
+
 }

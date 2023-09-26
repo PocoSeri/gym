@@ -1,12 +1,12 @@
 package com.gym.gym.controller;
 
 import com.gym.gym.base.controller.BaseController;
+import com.gym.gym.base.utils.ControllerMethod;
+import com.gym.gym.base.utils.annotation.ControllerAllowedMethods;
 import com.gym.gym.entity.Customer;
 import com.gym.gym.mapping.CustomerMapper;
 import com.gym.gym.model.CustomerDto;
 import com.gym.gym.service.CustomerService;
-import com.gym.gym.utils.ControllerMethod;
-import com.gym.gym.utils.annotation.ControllerAllowedMethods;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

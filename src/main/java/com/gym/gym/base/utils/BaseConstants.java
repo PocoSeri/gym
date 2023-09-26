@@ -1,4 +1,4 @@
-package com.gym.gym.utils;
+package com.gym.gym.base.utils;
 
 public class BaseConstants {
     public static String X_TOTAL_COUNT = "X-TOTAL-COUNT";

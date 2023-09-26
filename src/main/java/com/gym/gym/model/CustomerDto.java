@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @SuperBuilder
@@ -21,4 +23,5 @@ public class CustomerDto extends BaseIdDto<String> {
     private String email;
     private Integer age;
     private Boolean isActive;
+    private LocalDateTime registeredAt;
 }

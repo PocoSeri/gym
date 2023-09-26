@@ -1,4 +1,4 @@
-package com.gym.gym.utils;
+package com.gym.gym.base.utils;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

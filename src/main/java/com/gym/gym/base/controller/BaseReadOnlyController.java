@@ -7,10 +7,10 @@ import com.gym.gym.base.model.DropdownDto;
 import com.gym.gym.base.model.restresponse.PaginatedResponse;
 import com.gym.gym.base.model.restresponse.RestResponse;
 import com.gym.gym.base.service.IBaseReadOnlyService;
+import com.gym.gym.base.utils.BaseConstants;
+import com.gym.gym.base.utils.ControllerMethod;
+import com.gym.gym.base.utils.annotation.ControllerAllowedMethods;
 import com.gym.gym.exception.AppException;
-import com.gym.gym.utils.BaseConstants;
-import com.gym.gym.utils.ControllerMethod;
-import com.gym.gym.utils.annotation.ControllerAllowedMethods;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
@@ -29,9 +29,9 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.gym.gym.base.utils.ControllerMethod.DROPDOWN;
+import static com.gym.gym.base.utils.ControllerMethod.GET_ONE;
 import static com.gym.gym.exception.AppException.ErrCode.NOT_FOUND;
-import static com.gym.gym.utils.ControllerMethod.DROPDOWN;
-import static com.gym.gym.utils.ControllerMethod.GET_ONE;
 
 public abstract class BaseReadOnlyController<ENTITY extends BaseModel<PRIMARY_KEY>, DTO extends BaseDto, PRIMARY_KEY extends Serializable> {
     protected final IBaseReadOnlyService<ENTITY, PRIMARY_KEY> readonlyService;

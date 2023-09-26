@@ -8,7 +8,8 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @EnableMongoRepositories
 public class GymApplication {
 
-	public static void main(String[] args) {SpringApplication.run(GymApplication.class, args);
+	public static void main(String[] args) {
+		SpringApplication.run(GymApplication.class, args);
 	}
 
 }

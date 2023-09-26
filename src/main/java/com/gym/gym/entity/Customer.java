@@ -7,8 +7,12 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.stereotype.Component;
+
+import java.time.LocalDateTime;
 
 @EqualsAndHashCode(callSuper = true)
+@Component
 @Document(collection = "customer")
 @Data
 @AllArgsConstructor
@@ -21,5 +25,6 @@ public class Customer extends BaseModel<String> {
     private String email;
     private Integer age;
     private Boolean isActive = true;
+    private LocalDateTime registeredAt;
 
 }

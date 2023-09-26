@@ -56,7 +56,7 @@ public abstract class BaseReadOnlyService<ENTITY extends BaseModel<PRIMARY_KEY>,
                 .currentPage(all.getNumber())
                 .totalItems(all.getTotalElements())
                 .totalPages(all.getTotalPages())
-                .items(all.getContent())
+                .output(all.getContent())
                 .hasNext(all.hasNext())
                 .build();
     }

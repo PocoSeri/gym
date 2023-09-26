@@ -17,14 +17,10 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Customer extends BaseModel<String> {
+public class Activity extends BaseModel<String> {
     @Id
     private String id;
     private String name;
-    private String surname;
-    private String email;
-    private Integer age;
-    private Boolean isActive = true;
     private LocalDateTime registeredAt;
     private LocalDateTime modifiedAt;
 

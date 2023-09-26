@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 import static com.gym.gym.exception.AppException.ErrCode.UNPROCESSABLE_ENTITY;
@@ -32,17 +33,21 @@ public abstract class BaseService<ENTITY extends BaseModel<PRIMARY_KEY>, PRIMARY
     public ENTITY insert(ENTITY entity) throws AppException {
         if (Objects.isNull(entity))
             throw new AppException(AppException.ErrCode.BAD_INPUT, "You can't save a null entity");
-        if (entity.getId() != null && existsById(entity.getId()))
-            throw new AppException(AppException.ErrCode.ALREADY_EXISTS, String.format("The id: %s already exists", entity.getId()));
+        this.throwErrorIfIdExists(entity.getId());
+        LocalDateTime now = LocalDateTime.now();
+        entity.setModifiedAt(now);
+        entity.setRegisteredAt(now);
         return repository.save(entity);
     }
 
     @Override
-    public ENTITY update(ENTITY patchEntity) throws AppException {
-        findById(patchEntity.getId()).orElseThrow(() ->
-                this.getIdNotExistException(patchEntity.getId()));
+    public ENTITY update(ENTITY updateEntity) throws AppException {
+        ENTITY entity = findById(updateEntity.getId()).orElseThrow(() ->
+                this.getIdNotExistException(updateEntity.getId()));
 
-        return this.repository.save(patchEntity);
+        updateEntity.setModifiedAt(LocalDateTime.now());
+        updateEntity.setRegisteredAt(entity.getRegisteredAt());
+        return this.repository.save(updateEntity);
     }
 
     public ENTITY patch(ENTITY patchEntity) throws AppException, InvalidPatchDtoException {

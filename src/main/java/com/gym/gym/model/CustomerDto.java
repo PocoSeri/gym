@@ -24,4 +24,5 @@ public class CustomerDto extends BaseIdDto<String> {
     private Integer age;
     private Boolean isActive;
     private LocalDateTime registeredAt;
+    private LocalDateTime modifiedAt;
 }

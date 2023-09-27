@@ -7,6 +7,7 @@ import com.gym.gym.entity.Activity;
 import com.gym.gym.mapping.ActivityMapper;
 import com.gym.gym.model.ActivityDto;
 import com.gym.gym.repository.service.ActivityService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @ControllerAllowedMethods(httpMethod = {ControllerMethod.GET_ONE, ControllerMethod.GET_LIST, ControllerMethod.UPDATE, ControllerMethod.INSERT, ControllerMethod.DELETE})
 @RequestMapping("/api/activities")
+@Tag(name = "Activity")
 public class ActivityController extends BaseController<Activity, ActivityDto, String, ActivityDto> {
     @Autowired
     ActivityController(ActivityService service, ActivityMapper mapper) {

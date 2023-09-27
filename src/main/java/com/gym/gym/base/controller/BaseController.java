@@ -8,6 +8,9 @@ import com.gym.gym.base.model.restresponse.RestResponse;
 import com.gym.gym.base.service.IBaseService;
 import com.gym.gym.base.utils.ControllerMethod;
 import com.gym.gym.exception.AppException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +33,12 @@ public abstract class BaseController<ENTITY extends BaseModel<PRIMARY_KEY>, DTO 
 
     @PostMapping
     @ResponseBody
+    @Operation(summary = "Insert Operation")
+     @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Insert Succesful"),
+             @ApiResponse(responseCode = "400", description = "Error Request"),
+             @ApiResponse(responseCode = "500", description = "Interna Server Error"),
+    })
     public RestResponse<DTO> insert(@RequestBody DTO dto) throws AppException {
         this.isAllowed(ControllerMethod.INSERT);
         ENTITY entity = this.mapper.toEntity(dto);

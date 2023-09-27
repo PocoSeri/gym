@@ -13,7 +13,6 @@ import java.util.List;
 @Repository
 public class FilterableRepositoryImpl<T> implements FilterableRepository<T> {
 
-
     private MongoTemplate mongoTemplate;
 
     @Autowired

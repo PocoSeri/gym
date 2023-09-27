@@ -7,15 +7,14 @@ import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.data.mongo.AutoConfigureDataMongo;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.transaction.annotation.Transactional;
 
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasSize;
@@ -27,11 +26,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @SpringBootTest
-@ActiveProfiles("test")
-//@ExtendWith(SpringExtension.class)
+@AutoConfigureDataMongo
+//@ActiveProfiles("test")
 public class CustomerTests {
 
-    private final String COLLECTION_NAME = "customer";
     private final String apiUrl = "/api/customers";
 
     @Autowired
@@ -45,12 +43,12 @@ public class CustomerTests {
     @BeforeEach
     public void clearDatabase() {
         // Delete all documents from the MongoDB collection before each test method
+        String COLLECTION_NAME = "customer";
         mongoTemplateTest.dropCollection(COLLECTION_NAME);
     }
 
 
     @Test
-    @Transactional
     void postSuccess() throws Exception {
         CustomerDto dto = CustomerDto.builder()
                 .age(15)
@@ -106,7 +104,6 @@ public class CustomerTests {
     }
 
     @Test
-    @Transactional
     void putSuccess() throws Exception {
         CustomerDto dto = CustomerDto.builder()
                 .age(15)
@@ -145,7 +142,6 @@ public class CustomerTests {
                 .andReturn();
     }
     @Test
-    @Transactional
     void putFail_IdNotExist() throws Exception {
         CustomerDto dto = CustomerDto.builder()
                 .age(15)
@@ -164,7 +160,6 @@ public class CustomerTests {
     }
 
     @Test
-    @Transactional
     void getList() throws Exception {
         CustomerDto dto = CustomerDto.builder()
                 .age(15)

@@ -1,9 +1,9 @@
 package com.gym.gym.gym;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gym.gym.enums.Roles;
 import com.gym.gym.model.ActivityDto;
-import com.gym.gym.model.CustomerDto;
 import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,14 +25,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-
 @AutoConfigureMockMvc
 @SpringBootTest
 @AutoConfigureDataMongo
 @ActiveProfiles("test")
-public class CustomerTests {
+public class ActivityTests {
 
-    private final String apiUrl = "/api/customers";
+    private final String apiUrl = "/api/activities";
 
     @Autowired
     MockMvc mockMvc;
@@ -45,64 +44,49 @@ public class CustomerTests {
     @BeforeEach
     public void clearDatabase() {
         // Delete all documents from the MongoDB collection before each test method
-        String COLLECTION_NAME = "customer";
+        String COLLECTION_NAME = "activity";
         mongoTemplateTest.dropCollection(COLLECTION_NAME);
     }
 
 
     @Test
     void postSuccess() throws Exception {
-        MvcResult mvcResult = postCustomer();
+        MvcResult mvcResult = postActivity();
         String newlySavedId = JsonPath.read(mvcResult.getResponse().getContentAsString(), "$.output.id");
         mockMvc.perform(MockMvcRequestBuilders.get(apiUrl + "/" + newlySavedId)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$.output.name").value("filippo1"),
-                        jsonPath("$.output.surname").value("occhiali"),
-                        jsonPath("$.output.email").value("occhialini@gmail.com"),
-                        jsonPath("$.output.age").value(15),
-                        jsonPath("$.output.isActive").value(true),
-                        jsonPath("$.output.role").value("ADMIN")
+                        jsonPath("$.output.name").value("SALA PESI")
                 );
     }
 
     @Test
     void putSuccess() throws Exception {
-        CustomerDto dto = CustomerDto.builder()
-                .age(15)
-                .name("filippo1")
-                .surname("occhiali")
-                .email("occhialini@gmail.com")
-                .isActive(true)
-                .role(Roles.ADMIN)
+        ActivityDto dto = ActivityDto.builder()
+                .name("SALA PESI")
                 .build();
-        MvcResult mvcResult = postCustomer();
+        MvcResult mvcResult = postActivity();
 
         String newlySavedId = JsonPath.read(mvcResult.getResponse().getContentAsString(), "$.output.id");
         mockMvc.perform(MockMvcRequestBuilders.get(apiUrl + "/" + newlySavedId))
                 .andExpect(status().isOk())
                 .andDo(print())
-                .andExpect(jsonPath("$.output.email").value("occhialini@gmail.com"));
-        dto.setEmail("occhialini@gmail.it");
+                .andExpect(jsonPath("$.output.name").value("SALA PESI"));
+        dto.setName("CALISTHENICS");
         mockMvc.perform(MockMvcRequestBuilders.put(apiUrl +  "/" + newlySavedId)
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(dto)))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.output.email").value("occhialini@gmail.it"))
+                .andExpect(jsonPath("$.output.name").value("CALISTHENICS"))
                 .andReturn();
     }
     @Test
     void putFail_IdNotExist() throws Exception {
-        CustomerDto dto = CustomerDto.builder()
-                .age(15)
-                .name("filippo1")
-                .surname("occhiali")
-                .email("occhialini@gmail.com")
-                .isActive(true)
-                .role(Roles.ADMIN)
+        ActivityDto dto = ActivityDto.builder()
+                .name("SALA PESI")
                 .build();
 
         mockMvc.perform(MockMvcRequestBuilders.put(apiUrl +  "/" + 3)
@@ -114,7 +98,7 @@ public class CustomerTests {
 
     @Test
     void getList() throws Exception {
-        postCustomer();
+        postActivity();
 
         mockMvc.perform(MockMvcRequestBuilders.get(apiUrl))
                 .andExpect(status().isOk())
@@ -124,7 +108,7 @@ public class CustomerTests {
 
     @Test
     void deleteSuccess() throws Exception {
-        MvcResult mvcResult = postCustomer();
+        MvcResult mvcResult = postActivity();
         String newlySavedId = JsonPath.read(mvcResult.getResponse().getContentAsString(), "$.output.id");
         mockMvc.perform(MockMvcRequestBuilders.delete(apiUrl + "/" + newlySavedId)
                         .accept(MediaType.APPLICATION_JSON))
@@ -134,14 +118,9 @@ public class CustomerTests {
                 );
     }
 
-    private MvcResult postCustomer() throws Exception {
-        CustomerDto dto = CustomerDto.builder()
-                .age(15)
-                .name("filippo1")
-                .surname("occhiali")
-                .email("occhialini@gmail.com")
-                .isActive(true)
-                .role(Roles.ADMIN)
+    private MvcResult postActivity() throws Exception {
+        ActivityDto dto = ActivityDto.builder()
+                .name("SALA PESI")
                 .build();
         return mockMvc.perform(MockMvcRequestBuilders.post(apiUrl)
                         .content(objectMapper.writeValueAsString(dto))
@@ -149,12 +128,7 @@ public class CustomerTests {
                 .andDo(print())
                 .andExpectAll(
                         status().isOk(),
-                        jsonPath("$.output.name").value("filippo1"),
-                        jsonPath("$.output.surname").value("occhiali"),
-                        jsonPath("$.output.email").value("occhialini@gmail.com"),
-                        jsonPath("$.output.age").value(15),
-                        jsonPath("$.output.isActive").value(true),
-                        jsonPath("$.output.role").value("ADMIN")
+                        jsonPath("$.output.name").value("SALA PESI")
                 ).andReturn();
     }
 }

@@ -1,4 +1,4 @@
-package com.gym.gym.gym;
+package com.gym.gym.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gym.gym.enums.Roles;
@@ -12,11 +12,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @SpringBootTest
 @AutoConfigureDataMongo
-//@ActiveProfiles("test")
+@ActiveProfiles("test")
 public class CustomerTests {
 
     private final String apiUrl = "/api/customers";
@@ -50,27 +50,7 @@ public class CustomerTests {
 
     //@Test
     void postSuccess() throws Exception {
-        CustomerDto dto = CustomerDto.builder()
-                .age(15)
-                .name("filippo1")
-                .surname("occhiali")
-                .email("occhialini@gmail.com")
-                .isActive(true)
-                .role(Roles.ADMIN)
-                .build();
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post(apiUrl)
-                        .content(objectMapper.writeValueAsString(dto))
-                        .contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andDo(print())
-                .andExpectAll(
-                        status().isOk(),
-                        jsonPath("$.output.name").value("filippo1"),
-                        jsonPath("$.output.surname").value("occhiali"),
-                        jsonPath("$.output.email").value("occhialini@gmail.com"),
-                        jsonPath("$.output.age").value(15),
-                        jsonPath("$.output.isActive").value(true),
-                        jsonPath("$.output.role").value("ADMIN")
-                ).andReturn();
+        MvcResult mvcResult = postCustomer();
         String newlySavedId = JsonPath.read(mvcResult.getResponse().getContentAsString(), "$.output.id");
         mockMvc.perform(MockMvcRequestBuilders.get(apiUrl + "/" + newlySavedId)
                         .accept(MediaType.APPLICATION_JSON))
@@ -84,23 +64,6 @@ public class CustomerTests {
                         jsonPath("$.output.isActive").value(true),
                         jsonPath("$.output.role").value("ADMIN")
                 );
-//        DBObject dbObject = BasicDBObjectBuilder.start()
-//                .add("name", "FRANCO")
-//                .add("age", 41)
-//                .add("email", "test@test.id")
-//                .add("surname", "FRANCHINO").get();
-//
-//         //we check that the Document has no rows in the DB
-//        List<Customer> customers = mongoTemplateTest.findAll(Customer.class, COLLECTION_NAME);
-//        assertThat(customers).isEmpty();
-//
-//        //we save the DBObject and then we println for every row
-//        mongoTemplateTest.save(dbObject, COLLECTION_NAME);
-//        customers = mongoTemplateTest.findAll(Customer.class, COLLECTION_NAME);
-//        customers.forEach(System.out::println);
-//
-//        // we check that there's only 1 "FRANCO"
-//        assertThat(mongoTemplateTest.findAll(DBObject.class, COLLECTION_NAME)).extracting("name").containsOnly("FRANCO");
     }
 
    // @Test
@@ -113,19 +76,7 @@ public class CustomerTests {
                 .isActive(true)
                 .role(Roles.ADMIN)
                 .build();
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post(apiUrl)
-                        .content(objectMapper.writeValueAsString(dto))
-                        .contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andDo(print())
-                .andExpectAll(
-                        status().isOk(),
-                        jsonPath("$.output.name").value("filippo1"),
-                        jsonPath("$.output.surname").value("occhiali"),
-                        jsonPath("$.output.email").value("occhialini@gmail.com"),
-                        jsonPath("$.output.age").value(15),
-                        jsonPath("$.output.isActive").value(true),
-                        jsonPath("$.output.role").value("ADMIN")
-                ).andReturn();
+        MvcResult mvcResult = postCustomer();
 
         String newlySavedId = JsonPath.read(mvcResult.getResponse().getContentAsString(), "$.output.id");
         mockMvc.perform(MockMvcRequestBuilders.get(apiUrl + "/" + newlySavedId))
@@ -161,6 +112,27 @@ public class CustomerTests {
 
   //  @Test
     void getList() throws Exception {
+        postCustomer();
+
+        mockMvc.perform(MockMvcRequestBuilders.get(apiUrl))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(jsonPath("$.output", hasSize(1)));
+    }
+
+    @Test
+    void deleteSuccess() throws Exception {
+        MvcResult mvcResult = postCustomer();
+        String newlySavedId = JsonPath.read(mvcResult.getResponse().getContentAsString(), "$.output.id");
+        mockMvc.perform(MockMvcRequestBuilders.delete(apiUrl + "/" + newlySavedId)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpectAll(
+                        status().isOk()
+                );
+    }
+
+    private MvcResult postCustomer() throws Exception {
         CustomerDto dto = CustomerDto.builder()
                 .age(15)
                 .name("filippo1")
@@ -169,7 +141,7 @@ public class CustomerTests {
                 .isActive(true)
                 .role(Roles.ADMIN)
                 .build();
-        mockMvc.perform(MockMvcRequestBuilders.post(apiUrl)
+        return mockMvc.perform(MockMvcRequestBuilders.post(apiUrl)
                         .content(objectMapper.writeValueAsString(dto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
@@ -182,24 +154,5 @@ public class CustomerTests {
                         jsonPath("$.output.isActive").value(true),
                         jsonPath("$.output.role").value("ADMIN")
                 ).andReturn();
-
-        mockMvc.perform(MockMvcRequestBuilders.post(apiUrl)
-                        .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(dto)))
-                .andDo(print())
-                .andExpectAll(
-                        status().isOk(),
-                        jsonPath("$.output.name").value("filippo1"),
-                        jsonPath("$.output.surname").value("occhiali"),
-                        jsonPath("$.output.email").value("occhialini@gmail.com"),
-                        jsonPath("$.output.age").value(15),
-                        jsonPath("$.output.isActive").value(true),
-                        jsonPath("$.output.role").value("ADMIN")
-                ).andReturn();
-
-        mockMvc.perform(MockMvcRequestBuilders.get(apiUrl))
-                .andExpect(status().isOk())
-                .andDo(print())
-                .andExpect(jsonPath("$.output", hasSize(greaterThan(0))));
     }
 }

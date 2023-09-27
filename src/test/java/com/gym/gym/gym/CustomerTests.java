@@ -7,6 +7,7 @@ import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.MediaType;
@@ -14,15 +15,20 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.transaction.annotation.Transactional;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 
+@AutoConfigureMockMvc
 @SpringBootTest
+@ActiveProfiles("test")
+//@ExtendWith(SpringExtension.class)
 public class CustomerTests {
 
     private final String COLLECTION_NAME = "customer";
@@ -39,14 +45,13 @@ public class CustomerTests {
     @BeforeEach
     public void clearDatabase() {
         // Delete all documents from the MongoDB collection before each test method
-        System.out.println("clear db");
         mongoTemplateTest.dropCollection(COLLECTION_NAME);
     }
 
 
     @Test
+    @Transactional
     void postSuccess() throws Exception {
-        System.out.println("running test");
         CustomerDto dto = CustomerDto.builder()
                 .age(15)
                 .name("filippo1")
@@ -55,7 +60,8 @@ public class CustomerTests {
                 .isActive(true)
                 .role(Roles.ADMIN)
                 .build();
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post(apiUrl).content(objectMapper.writeValueAsString(dto))
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post(apiUrl)
+                        .content(objectMapper.writeValueAsString(dto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
                 .andExpectAll(
@@ -85,63 +91,120 @@ public class CustomerTests {
 //                .add("age", 41)
 //                .add("email", "test@test.id")
 //                .add("surname", "FRANCHINO").get();
-
-        // we check that the Document has no rows in the DB
-//        List<Customer> customers = mongoTemplate.findAll(Customer.class, COLLECTION_NAME);
+//
+//         //we check that the Document has no rows in the DB
+//        List<Customer> customers = mongoTemplateTest.findAll(Customer.class, COLLECTION_NAME);
 //        assertThat(customers).isEmpty();
 //
 //        //we save the DBObject and then we println for every row
-//        mongoTemplate.save(dbObject, COLLECTION_NAME);
-//        customers = mongoTemplate.findAll(Customer.class, COLLECTION_NAME);
+//        mongoTemplateTest.save(dbObject, COLLECTION_NAME);
+//        customers = mongoTemplateTest.findAll(Customer.class, COLLECTION_NAME);
 //        customers.forEach(System.out::println);
 //
 //        // we check that there's only 1 "FRANCO"
-//        assertThat(mongoTemplate.findAll(DBObject.class, COLLECTION_NAME)).extracting("name").containsOnly("FRANCO");
+//        assertThat(mongoTemplateTest.findAll(DBObject.class, COLLECTION_NAME)).extracting("name").containsOnly("FRANCO");
     }
 
-//    @Test
-//    void putSuccess() {
-//        DBObject dbObject = BasicDBObjectBuilder.start()
-//                .add("name", "FRANCO")
-//                .add("age", 41)
-//                .add("email", "test@test.id")
-//                .add("surname", "FRANCHINO").get();
-//
-//        mongoTemplateTest.save(dbObject, COLLECTION_NAME);
-//
-//        ObjectId objectId = (ObjectId) dbObject.get("id");
-//
-//        // Simulate the PUT request by updating the email field
-//        Query query = new Query(Criteria.where("id").is(objectId));
-//        Update update = new Update().set("email", "new.email@example.com");
-//        mongoTemplateTest.updateFirst(query, update, COLLECTION_NAME);
-//
-//        // Assert the updated state
-//        DBObject updatedObject = mongoTemplateTest.findOne(query, DBObject.class, COLLECTION_NAME);
-//        assertThat(updatedObject).isNotNull();
-//        assertThat(updatedObject.get("email")).isEqualTo("new.email@example.com");
-//
-//        assertThat(mongoTemplateTest.findAll(DBObject.class, COLLECTION_NAME)).extracting("name").containsOnly("FRANCO");
-//    }
-//
-//    @Test
-//    void deleteSuccess() {
-//        DBObject dbObject = BasicDBObjectBuilder.start()
-//                .add("name", "FRANCO")
-//                .add("age", 41)
-//                .add("email", "test@test.id")
-//                .add("surname", "FRANCHINO").get();
-//
-//        mongoTemplateTest.save(dbObject, COLLECTION_NAME);
-//
-//        ObjectId objectId = (ObjectId) dbObject.get("id");
-//
-//        // Simulate the DELETE request by deleting the document based on _id
-//        Query query = new Query(Criteria.where("id").is(objectId));
-//        mongoTemplateTest.remove(query, COLLECTION_NAME);
-//
-//        // we check that the Document has no rows in the DB
-//        List<Customer> customers = mongoTemplateTest.findAll(Customer.class, COLLECTION_NAME);
-//        assertThat(customers).isEmpty();
-//    }
+    @Test
+    @Transactional
+    void putSuccess() throws Exception {
+        CustomerDto dto = CustomerDto.builder()
+                .age(15)
+                .name("filippo1")
+                .surname("occhiali")
+                .email("occhialini@gmail.com")
+                .isActive(true)
+                .role(Roles.ADMIN)
+                .build();
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post(apiUrl)
+                        .content(objectMapper.writeValueAsString(dto))
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andDo(print())
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.output.name").value("filippo1"),
+                        jsonPath("$.output.surname").value("occhiali"),
+                        jsonPath("$.output.email").value("occhialini@gmail.com"),
+                        jsonPath("$.output.age").value(15),
+                        jsonPath("$.output.isActive").value(true),
+                        jsonPath("$.output.role").value("ADMIN")
+                ).andReturn();
+
+        String newlySavedId = JsonPath.read(mvcResult.getResponse().getContentAsString(), "$.output.id");
+        mockMvc.perform(MockMvcRequestBuilders.get(apiUrl + "/" + newlySavedId))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(jsonPath("$.output.email").value("occhialini@gmail.com"));
+        dto.setEmail("occhialini@gmail.it");
+        mockMvc.perform(MockMvcRequestBuilders.put(apiUrl +  "/" + newlySavedId)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(dto)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.output.email").value("occhialini@gmail.it"))
+                .andReturn();
+    }
+    @Test
+    @Transactional
+    void putFail_IdNotExist() throws Exception {
+        CustomerDto dto = CustomerDto.builder()
+                .age(15)
+                .name("filippo1")
+                .surname("occhiali")
+                .email("occhialini@gmail.com")
+                .isActive(true)
+                .role(Roles.ADMIN)
+                .build();
+
+        mockMvc.perform(MockMvcRequestBuilders.put(apiUrl +  "/" + 3)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(dto)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    @Transactional
+    void getList() throws Exception {
+        CustomerDto dto = CustomerDto.builder()
+                .age(15)
+                .name("filippo1")
+                .surname("occhiali")
+                .email("occhialini@gmail.com")
+                .isActive(true)
+                .role(Roles.ADMIN)
+                .build();
+        mockMvc.perform(MockMvcRequestBuilders.post(apiUrl)
+                        .content(objectMapper.writeValueAsString(dto))
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andDo(print())
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.output.name").value("filippo1"),
+                        jsonPath("$.output.surname").value("occhiali"),
+                        jsonPath("$.output.email").value("occhialini@gmail.com"),
+                        jsonPath("$.output.age").value(15),
+                        jsonPath("$.output.isActive").value(true),
+                        jsonPath("$.output.role").value("ADMIN")
+                ).andReturn();
+
+        mockMvc.perform(MockMvcRequestBuilders.post(apiUrl)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(dto)))
+                .andDo(print())
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.output.name").value("filippo1"),
+                        jsonPath("$.output.surname").value("occhiali"),
+                        jsonPath("$.output.email").value("occhialini@gmail.com"),
+                        jsonPath("$.output.age").value(15),
+                        jsonPath("$.output.isActive").value(true),
+                        jsonPath("$.output.role").value("ADMIN")
+                ).andReturn();
+
+        mockMvc.perform(MockMvcRequestBuilders.get(apiUrl))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(jsonPath("$.output", hasSize(greaterThan(0))));
+    }
 }

@@ -29,11 +29,11 @@ public class JwtFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String header = httpRequest.getHeader(jwtConfig.getHeader());
         String requestURI = httpRequest.getRequestURI();
-        if (requestURI.startsWith("/api/users")) {
+        if (requestURI.startsWith("/api/users/signin")) {
             chain.doFilter(request, response);
             return;
         }
-
+        //todo: aggiungere controllo per role al signup
         if (header == null || !header.startsWith(jwtConfig.getPrefix())) {
             throw new AppException(AppException.ErrCode.BAD_INPUT, "Jwt not valid");
         }

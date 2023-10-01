@@ -1,8 +1,10 @@
 package com.gym.gym.model;
 
-import com.gym.gym.base.model.BaseDto;
 import com.gym.gym.base.model.BaseIdDto;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 @Getter

@@ -1,6 +1,5 @@
 package com.gym.gym.entity;
 
-import com.gym.gym.base.model.BaseModel;
 import com.gym.gym.enums.Roles;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;

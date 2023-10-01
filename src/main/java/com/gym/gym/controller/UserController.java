@@ -1,6 +1,5 @@
 package com.gym.gym.controller;
 
-import com.gym.gym.base.controller.BaseController;
 import com.gym.gym.base.model.restresponse.RestResponse;
 import com.gym.gym.entity.UserModel;
 import com.gym.gym.mapping.UserModelMapper;

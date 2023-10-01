@@ -2,18 +2,16 @@ package com.gym.gym.entity;
 
 import com.gym.gym.base.model.BaseModel;
 import com.gym.gym.enums.Roles;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.stereotype.Component;
 
-@EqualsAndHashCode(callSuper = true)
+
 @Component
 @Document(collection = "customer")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Customer extends BaseModel<String> {

@@ -6,9 +6,16 @@ import lombok.NonNull;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Utils {
+
+    public static String parameterizeMessage(String msg) {
+        Pattern p = Pattern.compile("\\<([\\w.$]+|\"[^\"]+\"|'[^']+')>",
+                Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
+        return p.matcher(msg).replaceAll("%s");
+    }
 
     public static @NonNull List<DropdownDto> rolesList() {
         return Arrays.stream(Roles.values())

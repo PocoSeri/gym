@@ -1,18 +1,15 @@
 package com.gym.gym.entity;
 
 import com.gym.gym.base.model.BaseModel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.stereotype.Component;
 
-@EqualsAndHashCode(callSuper = true)
 @Component
 @Document(collection = "activity")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Activity extends BaseModel<String> {

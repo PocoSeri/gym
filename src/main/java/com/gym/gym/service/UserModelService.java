@@ -2,8 +2,6 @@ package com.gym.gym.service;
 
 
 import com.gym.gym.base.repository.FilterableRepository;
-import com.gym.gym.base.service.BaseService;
-import com.gym.gym.base.service.IBaseService;
 import com.gym.gym.entity.UserModel;
 import com.gym.gym.exception.AppException;
 import com.gym.gym.repository.UserModelRepository;

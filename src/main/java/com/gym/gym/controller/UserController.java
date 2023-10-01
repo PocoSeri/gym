@@ -2,7 +2,6 @@ package com.gym.gym.controller;
 
 import com.gym.gym.base.model.restresponse.RestResponse;
 import com.gym.gym.entity.UserModel;
-import com.gym.gym.mapping.UserModelMapper;
 import com.gym.gym.model.LoginDto;
 import com.gym.gym.model.SignupDto;
 import com.gym.gym.model.UserDto;
@@ -15,11 +14,9 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserModelService service;
-    private final UserModelMapper mapper;
     @Autowired
-    protected UserController(UserModelService userModelService, UserModelMapper userModelMapper) {
+    protected UserController(UserModelService userModelService) {
         this.service = userModelService;
-        this.mapper = userModelMapper;
     }
 
     @PostMapping("/signin")

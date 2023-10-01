@@ -1,7 +1,6 @@
 package com.gym.gym.service;
 
 
-import com.gym.gym.base.repository.FilterableRepository;
 import com.gym.gym.entity.UserModel;
 import com.gym.gym.exception.AppException;
 import com.gym.gym.repository.UserModelRepository;
@@ -18,7 +17,7 @@ public class UserModelService {
     private final JwtService jwtService;
 
     @Autowired
-    public UserModelService(UserModelRepository userModelRepository, FilterableRepository filterableRepository, JwtService jwtService) {
+    public UserModelService(UserModelRepository userModelRepository, JwtService jwtService) {
         this.userModelRepository = userModelRepository;
         this.jwtService = jwtService;
     }

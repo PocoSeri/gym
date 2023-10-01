@@ -25,7 +25,6 @@ public class JwtService {
         this.secretKey = new SecretKeySpec(secret.getBytes(), SignatureAlgorithm.HS256.getJcaName());
     }
 
-    ;
     public String getJwtToken(Roles role) {
         Key secretKey = new SecretKeySpec(secret.getBytes(), SignatureAlgorithm.HS256.getJcaName());
 

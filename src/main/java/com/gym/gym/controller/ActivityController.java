@@ -6,7 +6,7 @@ import com.gym.gym.base.utils.annotation.ControllerAllowedMethods;
 import com.gym.gym.entity.Activity;
 import com.gym.gym.mapping.ActivityMapper;
 import com.gym.gym.model.ActivityDto;
-import com.gym.gym.repository.service.ActivityService;
+import com.gym.gym.service.ActivityService;
 import com.gym.gym.swagger.OpenApiConfig;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;

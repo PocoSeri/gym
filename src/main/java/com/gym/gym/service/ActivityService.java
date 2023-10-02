@@ -1,4 +1,4 @@
-package com.gym.gym.repository.service;
+package com.gym.gym.service;
 
 import com.gym.gym.base.repository.FilterableRepository;
 import com.gym.gym.base.service.BaseService;

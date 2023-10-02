@@ -6,7 +6,7 @@ import com.gym.gym.base.utils.annotation.ControllerAllowedMethods;
 import com.gym.gym.entity.Customer;
 import com.gym.gym.mapping.CustomerMapper;
 import com.gym.gym.model.CustomerDto;
-import com.gym.gym.repository.service.CustomerService;
+import com.gym.gym.service.CustomerService;
 import com.gym.gym.swagger.OpenApiConfig;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;

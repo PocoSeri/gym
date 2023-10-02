@@ -16,7 +16,7 @@ public class OpenApiConfig {
     public static final String SECURITY_SCHEMA_NAME = "JWT Bearer Token";
 
     @Bean
-    public OpenAPI openApiConfiguration(){
+    public OpenAPI openApiConfiguration() {
         return new OpenAPI().components(new Components().addSecuritySchemes(SECURITY_SCHEMA_NAME, new SecurityScheme()
                 .name(SECURITY_SCHEMA_NAME)
                 .type(SecurityScheme.Type.HTTP)

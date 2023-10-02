@@ -29,7 +29,7 @@ public class JwtFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String header = httpRequest.getHeader(jwtConfig.getHeader());
         String requestURI = httpRequest.getRequestURI();
-        if (requestURI.startsWith("/api/users/signin")) {
+        if (requestURI.startsWith("/api/users/")) {
             chain.doFilter(request, response);
             return;
         }
